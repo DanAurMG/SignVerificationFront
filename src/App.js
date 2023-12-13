@@ -1,24 +1,33 @@
-import logo from './logo.svg';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './App.css';
+import Landing from "./screens/Landing";
+import Login from "./screens/Login";
+import ResetPass from "./screens/ResetPass";
+import ResetingPass from "./screens/ResetingPass";
+import Authorized from "./screens/Authorized";
+import { useState } from "react";
 
 function App() {
+
+const [user, setUser] = useState([]);
+const [emailRec, setEmailRec] = useState([]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Landing />} />
+      <Route path="/signIn">
+      {
+        !user.length > 0
+        ? <Route path="/signIn" element={<Login setUser = {setUser}/>} />
+        : <Route path="/signIn" element={<Authorized user={user} setUser = {setUser}/>} />
+      }
+      </Route>
+      {/* <Route path="/authorized" element={<Authorized />} /> */}
+      <Route path="/reset" element={<ResetPass setEmailRec = {setEmailRec} setUser = {setUser}/>} />
+      <Route path="/reset/authorized" element={<ResetingPass user={user} email={emailRec}/>}/>
+    </Routes>
+  </BrowserRouter>
   );
 }
 
